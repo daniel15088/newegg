@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<p>Print Correct if number guessed correctly. Print Incorrect if number not guessed correctly.</p>
+	<p>Guess a number between 1 and 10</p>
+	<input type="text" name="number" id="guessedNumber">
+	<button onclick='checkNumber()''>Submit</button>
+	<p id="displayCorrect"></p>
+
+	<script>
+		var myNumber = 7;
+		function checkNumber() {
+			var g = document.getElementById("guessedNumber").value;
+			//is g equivalent to myNumber? If yes, return true
+			if (g == myNumber) {
+				console.log("Correct!");
+				document.getElementById("displayCorrect").innerHTML = "Correct";
+			} else {
+				console.log("Incorrect!");
+				document.getElementById("displayCorrect").innerHTML = "Incorrect";
+			}
+		}
+	</script>
+</body>
+</html>

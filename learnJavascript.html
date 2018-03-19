@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    // make text red and 35px
+  function myFunction() {
+      document.getElementById('demo').style.color='red';
+      document.getElementById('demo').style.fontSize='35px';
+  }
+  //makes text blue and smaller
+  function functionBlue() {
+    document.getElementById('demo').style.color='blue';
+    document.getElementById('demo').style.fontSize='16px';
+  }
+</script>
+</head>
+<body>
+
+<button onclick="document.getElementById('myImage').src='pic_bulbon.gif'">Turn on the light</button>
+
+<img id="myImage" src="pic_bulboff.gif" style="width:100px">
+
+<button onclick="document.getElementById('myImage').src='pic_bulboff.gif'">Turn off the light</button>
+
+
+<p id="demo">JavaScript can change the style of an HTML element.</p>
+
+<button type="button" onclick="myFunction()">Make font bigger and red</button>
+<button type="button" onclick="functionBlue()">Make font smaller and blue</button>
+
+ 
+
+</body>
+</html>
