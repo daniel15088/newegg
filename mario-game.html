@@ -1,84 +1,197 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title></title>
-</head>
-<body>
-	<div>
-		<img src="8_Bit_Mario.png" width="25" height="30" id="mario">
-	</div>
-	<body onload="startGame()">
-<script>
-
-	var myGamePiece;
-
-	function startGame() {
-		document.getElementById("mario")
-    	myGamePiece = new component(30, 30, "red", 10, 120);
-
-    	myGameArea.start();
-	}
-
-	var myGameArea = {
-	    canvas : document.createElement("canvas"),
-	    start : function() {
-	        this.canvas.width = 480;
-	        this.canvas.height = 270;
-	        this.context = this.canvas.getContext("2d");
-	        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-	        this.interval = setInterval(updateGameArea, 20);
-	    },
-	    clear : function() {
-	        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	<style>
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		function collision($div1, $div2) {
+	      var x1 = $div1.offset().left;
+	      var y1 = $div1.offset().top;
+	      var h1 = $div1.outerHeight(true);
+	      var w1 = $div1.outerWidth(true);
+	      var b1 = y1 + h1;
+	      var r1 = x1 + w1;
+	      var x2 = $div2.offset().left;
+	      var y2 = $div2.offset().top;
+	      var h2 = $div2.outerHeight(true);
+	      var w2 = $div2.outerWidth(true);
+	      var b2 = y2 + h2;
+	      var r2 = x2 + w2;
+	        
+	      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+	      return true;
 	    }
-	}
 
-	function component(width, height, color, x, y) {
-	    this.width = width;
-	    this.height = height;
-	    this.speedX = 0;
-	    this.speedY = 0;
-	    this.x = x;
-	    this.y = y;    
-	    this.update = function() {
-	        ctx = myGameArea.context;
-	        ctx.fillStyle = color;
-	        ctx.fillRect(this.x, this.y, this.width, this.height);
+	    var upleft = 0;
+	    function goLeft() {
+	        $("#bullet").animate({
+	        	left: -100
+	        }, 5000);
+        }	
+
+        function addBullet() {
+       		var b = document.createElement("IMG");
+       		b.setAttribute("src", "Bullet-Bill.png");
+       		b.setAttribute("width", "30");
+    		b.setAttribute("height", "25");
+    		var randomNumber = Math.random()*100+100;
+    		b.setAttribute("style", "position:absolute; right:0px; top:" + randomNumber + "px");
+
+    		b.setAttribute("id", "bullet");
+    		
+    		// b.css("position", "absolute");
+    		// b.css("right", "0px");
+    		// b.css("top", "100px");
+    		document.getElementById("gameBody").appendChild(b);
+
+		//b.innerHTML = (Math.random()*200);
+
+	        $(b).animate({
+	        	left: -100
+	        }, 5000);
+        }	
+	 	function leftArrowPressed() {
+	    	var element = document.getElementById("mario");
+	    	console.log(element.style.left);
+	    	element.style.left = parseInt(element.style.left) - 5 + 'px';
 	    }
-	    this.newPos = function() {
-	        this.x += this.speedX;
-	        this.y += this.speedY;        
-	    }    
-	}
 
-	function updateGameArea() {
-	    myGameArea.clear();
-	    myGamePiece.newPos();    
-	    myGamePiece.update();
-	}
+	    function rightArrowPressed() {
+	    	var element = document.getElementById("mario");
+	    	element.style.left = parseInt(element.style.left) + 10 + 'px';
 
-	function moveup() {
-	    myGamePiece.speedY -= 1; 
-	}
+	    }
 
-	function movedown() {
-	    myGamePiece.speedY += 1; 
-	}
+	    function upArrowPressed() {
+	    	var element = document.getElementById("mario");
+	    	element.style.top = parseInt(element.style.top) - 15 + 'px';
+	    	// setTimeout(funcion() {
+	    	// 	element.style.top = parseInt(element.style.top) + 15 + 'px';
+	    	// }, 1000);
+	    }
 
-	function moveleft() {
-	    myGamePiece.speedX -= 1; 
-	}
+	    function downArrowPressed() {
+	    	var element = document.getElementById("mario");
+	    	element.style.top = parseInt(element.style.top) + 5 + 'px';
+	    }
 
-	function moveright() {
-	    myGamePiece.speedX += 1; 
-	}
+	    function moveSelection(evt) {
+
+	    	// if (evt.keyCode == 37) {
+	    	// 	leftArrowPressed();
+	    	// } else if (evt.keycode == 39) {
+	    	// 	rightArrowPressed();
+	    	// } else if (evt.keycode==38) {
+	    	// 	upArrowPressed();
+	    	// }
+
+	        switch (evt.keyCode) {
+	            case 37:
+	            	leftArrowPressed();
+	            break;
+	            case 39:
+	            	rightArrowPressed();
+	            break;
+	            case 38:
+	            	upArrowPressed();
+	            break;
+	            case 40:
+	            	downArrowPressed();
+	            break;
+	        }
+	    };
+
+	    function performCollisionCheck() {
+	        //performCollisionCheck();
+	       	var mario = $('#mario');
+		 	var bullet = $('#bullet');
+	        if (collision(mario, bullet)){
+			  	console.log("Game over");
+			  	$("#gameOver").text("Game Over");
+			    //you died
+			  	//print You Lost
+			 }
+	    }
+
+	    var movement = [];
+	    var change = {
+		  37: {
+		    left: "-=1"
+		  },
+
+		  38: {
+		    top: "-=1"
+		  },
+
+		  39: {
+		    left: "+=1"
+		  }
+		}
+
+	    function keydown2(e) {
+		  var key = e.which;
+		  var animation = change[key];
+		  if (!movement[key]) { // watch out for repeating keys!
+		    movement[key] = setInterval(keepGoing, 1)
+		  }
+		  //  console.log("down", key, movement[key])
+		  function keepGoing() {
+		    $("#mario").css(animation)
+		  }
+		}
+
+		function dropBall() {
+		    var ballTop = parseInt($("#mario").css("top"));
+		    ballTop += 1;
+		    $("#mario").css("top", ballTop + "px");
+			if (ballTop==200){
+		    	clearInterval(droppingBall);
+		    }
+		}
+
+		var droppingBall;
+
+		function keyup2(e) {
+		  var key = e.which
+		  movement[key] = clearInterval(movement[key])
+		    //  console.log("up", key, movement[key])
+		    
+		    // if you let go of up key
+		    if (key==38){
+		    	droppingBall = setInterval(dropBall, 1);
+		    }
+
+		}
+
+
+		function docReady()
+		{
+		 // when keydown listener triggered, call function moveSelection 
+		  window.addEventListener('keydown', keydown2);
+		  window.addEventListener('keyup', keyup2);
+		  //goLeft();
+		  setInterval(addBullet, 1000);
+		  setInterval(performCollisionCheck, 5);
+
+		  // call these functions every 10 seconds
+		  	//append a bullet to bodys
+		  	// call go left on bullet
+		}
 </script>
-<div style="text-align:center;width:480px;">
-  <button onclick="moveup()">UP</button><br><br>
-  <button onclick="moveleft()">LEFT</button>
-  <button onclick="moveright()">RIGHT</button><br><br>
-</div>
+</head>
+<body onload="docReady()" onkeydown="" onkeyup="" >
+	<div id="gameBody">
+		<img src="8_Bit_Mario.png" width="25" height="30" style="position:absolute;left:0px; top:200px;" id="mario">
+<!-- 		<canvas id="myCanvas" width="25" height="30"></canvas> -->
 
+		<img src="ground.png" style="margin-top: 30px">
+	</div>
+	<div id="gameOver"></div>
+	<div class="bulletBill">
 
+	</div>
 </body>
 </html>
